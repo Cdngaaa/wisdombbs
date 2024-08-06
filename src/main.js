@@ -41,7 +41,7 @@ app.use(store)
 app.use(ElementPlus);
 //定义全局VueCookies
 app.config.globalProperties.VueCookies = VueCookies;
-app.config.globalProperties.globalInfo = {  //定义全局变量，以后想要定义全局变量，都得定义在globalProperties之后，然后用{proxy}=this，取到
+app.config.globalProperties.globalInfo = {  
     bodyWidth:1300,
     avatarUrl:"/api/file/getAvatar/",
     imageUrl:"/api/file/getImage/"
