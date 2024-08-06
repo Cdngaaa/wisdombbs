@@ -1,0 +1,60 @@
+// 定义滚动条的样式
+::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track{
+  background: rgb(239, 239, 239);
+}
+::-webkit-scrollbar-thumb{
+  background: #bfbfbf;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-corner{
+  background: #bfbfbf;
+}
+
+// 定义变量，直接使用--link取到本变量
+:root{
+  --link:#007fff;
+  --pink:#ff6699;
+  --text2:#61666d;
+  --icon:#9499a0;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  background: rgb(243, 243, 243);
+}
+
+*{
+  box-sizing: border-box;
+}
+
+.a-link{
+  text-decoration: none;
+  color:var(--link);
+  cursor: pointer;
+}
+
+.el-form-item{
+  align-items:center;
+}
+
+.container-body {
+  margin: 0px auto;
+  padding-top: 5px;
+}
+
+.tag {
+  font-size: 12px;
+  border-radius: 3px;
+  padding: 0px 5px;
+  margin-right: 5px;
+}
+
+.tag-no-audit{
+  color: var(--text2);
+  border: 1px solid var(--text2);
+}

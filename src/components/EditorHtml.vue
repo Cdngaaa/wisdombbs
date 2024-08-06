@@ -1,0 +1,87 @@
+<template>
+    <div class="editor-html">
+        <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" :mode="mode"/>
+        <Editor 
+          :style="{height: height + 'px' , 'over-flow-y': 'hidden'}"  
+          :model-value="modelValue" 
+          :defaultConfig="editorConfig"
+          :mode="mode"
+          @onCreated="handleCreated"
+          @onChange="onChange">
+      </Editor>
+    </div>
+</template>
+
+<script setup>
+    import "@wangeditor/editor/dist/css/style.css"
+    import { onBeforeMount,onBeforeUnmount,ref,shallowRef } from "vue";
+    import { Editor,Toolbar} from "@wangeditor/editor-for-vue"
+    import { getCurrentInstance } from "vue";
+    import {useStore} from 'vuex'
+    const {proxy} = getCurrentInstance();
+    const store = useStore();
+
+    const props = defineProps({
+        modelValue:{
+            type:String,
+            default:""
+        },
+        height:{
+            type:Number,
+            default:500,
+        }
+    })
+
+
+    const mode = ref("default");
+    const editorRef = shallowRef();
+    const toolbarConfig = {
+      excludeKeys:["uploadVideo"]
+    }
+
+    const editorConfig = {
+      placeholder:"请输入内容......",
+      excludeKeys:["uploadVideo"],
+      MENU_CONF:{
+        uploadImage:{
+          maxFileSize: 3 * 1024 * 1024,
+          server:"/api/file/uploadImage",
+          fieldName:"file",
+          customInsert(responseData,insertFn){
+            if (responseData.code == 200){
+              insertFn(
+                proxy.globalInfo.imageUrl + responseData.data.fileName,
+                "",
+                ""
+              );
+              return;
+            }else if (responseData.code == 901){
+              store.commit("showLogin",true);
+              store.commit("updateLoginUserInfo",null);
+              return;
+            }
+            proxy.Message.error(responseData.info); 
+          }
+        }
+      }
+    }
+
+    const emit = defineEmits();
+    const onChange = (editor) => {
+      emit("update:modelValue",editor.getHtml());
+    }
+
+    onBeforeUnmount(()=> {
+      const editor = editorRef.value;
+      if(editor == null) return;
+      editor.destroy();
+    })
+
+    const handleCreated = (editor) => {
+      editorRef.value = editor;
+    }
+
+</script>
+
+<style lang="scss" scoped>
+</style>
